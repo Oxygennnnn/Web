@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz</title>
+  <link rel="stylesheet" href="Contentpage.css">
+  <script src="/socket.io/socket.io.js"></script>
+
+</head>
+<body>
+  <video autoplay muted loop id="background-video">
+    <source src="background-video.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+  <div class="top-bar">
+    <div class="links">
+      <a href="Homepage.html">Homepage</a>
+      <a href="About_Me.html">About Me</a>
+      <a href="Explore_More.html">Explore More</a>
+      <a href="Quiz.html">Quiz</a>
+    </div>
+  </div>
+  
+  <div id="timer">Elapsed Time: <span id="total-time">0</span> seconds</div>
+  <div id="question-timer">Time Left: <span id="time">15</span> seconds</div>
+
+  <!-- Welcome Message -->
+  <div id="welcome-message">
+    <p>Welcome to the quiz!</p>
+    <p>Give your name:</p>
+    <form>
+      <input type="text" id="player-name" name="player-name" placeholder="Enter your name">
+      <button type="submit" id="start-button">Start</button>
+    </form>
+  </div>
+
+  <!-- Quiz content -->
+  <div id="quiz-container" style="display:none;">
+    <div id="question-screen">
+      <div id="content">
+        <div id="questionID" class="question-text">Question 1</div>
+        <div id="question" class="question-text">Question text</div>
+        <div id="choices" class="question"></div>
+        <div id="timer" class="timer-text">Time to answer: <span id="time">15</span> seconds</div>
+      </div>
+      <div id="feedback"></div>
+      <button id="next-button" style="display:none;" onclick="nextQuestion()">Next Question</button>
+    </div>
+  </div>
+
+  <!-- Leaderboard -->
+  <div id="leaderboard-container">
+    <h2>Leaderboard</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Rank</th>
+          <th>Name</th>
+          <th>Score</th>
+          <th>Time (seconds)</th>
+        </tr>
+      </thead>
+      <tbody id="leaderboard-body">
+        <!-- Dynamic content will be added here -->
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const socket = io();
+  
+      const inputField = document.getElementById('player-name');
+      const sendButton = document.getElementById('start-button');
+  
+      sendButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        const userName = inputField.value;
+        document.getElementById('welcome-message').style.display = 'none';
+        document.getElementById('quiz-container').style.display = 'block';
+        startTotalTimer();
+        showQuestion();
+        startQuestionTimer();
+      });
+
+      socket.on('updateLeaderboard', (leaderboard) => {
+        updateLeaderboard(leaderboard);
+      });
+    });
+
+    // 框渐入特效
+    window.onload = function() {
+      const welcomeMessage = document.getElementById('welcome-message');
+      let opacity = 0;
+
+      const fadeInInterval = setInterval(() => {
+        opacity += 0.01;
+        welcomeMessage.style.opacity = opacity;
+        if (opacity >= 1) {
+          clearInterval(fadeInInterval);
+        }
+      }, 20);
+    };
+
+    const questions = [
+      { question: "Who is the MVP of the 2023-2024 NBA regular season?", choices: ["Nikola Jokić", "Shai Gilgeous-Alexander", "Joel Embiid", "Giannis Antetokounmpo"], correct: 0 },
+      { question: "Which club won the UEFA Champions League in 2023?", choices: ["Manchester City FC", "Real Madrid", "FC Bayren Munich", "FC Barcelona"], correct: 0 },
+      // Add more questions as needed
+    ];
+  
+    let totalTimerId;
+    let questionTimerId;
+    let totalTime = 0;
+    let currentQuestion = 0;
+    let score = 0;
+  
+    function startTotalTimer() {
+      const totalTimeDisplay = document.getElementById('total-time');
+      function updateTotalTimer() {
+        totalTime++;
+        totalTimeDisplay.textContent = totalTime;
+      }
+      totalTimerId = setInterval(updateTotalTimer, 1000);
+    }
+  
+    function startQuestionTimer() {
+      const timeDisplay = document.getElementById('time');
+      let timeLeft = 15;
+  
+      function updateQuestionTimer() {
+        timeDisplay.textContent = timeLeft;
+        timeLeft--;
+  
+        if (timeLeft < 0) {
+          clearInterval(questionTimerId);
+          nextQuestion();
+        }
+      }
+  
+      clearInterval(questionTimerId);
+      updateQuestionTimer();
+      questionTimerId = setInterval(updateQuestionTimer, 1000);
+    }
+
+    function showQuestion() {
+      const questionObj = questions[currentQuestion];
+      document.getElementById('questionID').textContent = `Question ${currentQuestion + 1}`;
+      document.getElementById('question').textContent = questionObj.question;
+      const choicesContainer = document.getElementById('choices');
+      choicesContainer.innerHTML = '';
+      questionObj.choices.forEach((choice, index) => {
+        const button = document.createElement('button');
+        button.textContent = choice;
+        button.onclick = () => checkAnswer(index);
+        choicesContainer.appendChild(button);
+      });
+    }
+  
+    function checkAnswer(index) {
+      clearInterval(questionTimerId);
+      document.getElementById('content').style.display = 'none';
+      const feedbackElement = document.getElementById('feedback');
+      if (index === questions[currentQuestion].correct) {
+        score++;
+        feedbackElement.textContent = 'Your answer is correct!';
+      } else {
+        feedbackElement.textContent = 'Your answer is incorrect!';
+      }
+      feedbackElement.style.display = 'block';
+      if (currentQuestion + 1 < questions.length) {
+        document.getElementById('next-button').style.display = 'block';
+      } else {
+        showResults();
+      }  
+    }
+  
+    function nextQuestion() {
+      currentQuestion += 1;
+      if (currentQuestion < questions.length) {
+        showQuestion();
+        document.getElementById('content').style.display = 'block';
+        document.getElementById('feedback').textContent = '';
+        document.getElementById('next-button').style.display = 'none';
+        startQuestionTimer();
+      } else {
+        showResults();
+      }
+    }
+
+    function showResults() {
+      clearInterval(totalTimerId);
+      const feedbackElement = document.getElementById('feedback');
+      feedbackElement.innerHTML = `Quiz finished!<br>Total time: ${totalTime} seconds.<br>Score: ${score}/${questions.length}`;
+      document.getElementById('next-button').style.display = 'none';
+      const userName = document.getElementById('player-name').value;
+      const socket = io();
+      socket.emit('quizResult', { userName, score, totalTime });
+      setTimeout(() => {
+        document.getElementById('quiz-container').style.display = 'none';
+        document.getElementById('leaderboard-container').style.display = 'block';
+      }, 2000);
+    }
+
+    function updateLeaderboard(leaderboard) {
+      const leaderboardBody = document.getElementById('leaderboard-body');
+      leaderboardBody.innerHTML = '';
+      leaderboard.forEach((entry, index) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${index + 1}</td>
+          <td>${entry.userName}</td>
+          <td>${entry.score}</td>
+          <td>${entry.totalTime}</td>
+        `;
+        leaderboardBody.appendChild(row);
+      });
+    }
+  </script>
+</body>
+</html>
