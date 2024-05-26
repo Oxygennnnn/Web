@@ -1,22 +1,17 @@
 [
   {
-    "userName": "1",
-    "score": 2,
-    "totalTime": 1
+    "userName": "chashao",
+    "score": 10,
+    "totalTime": 39
   },
   {
-    "userName": "3",
-    "score": 2,
-    "totalTime": 1
+    "userName": "Oxygen",
+    "score": 10,
+    "totalTime": 43
   },
   {
-    "userName": "shen",
-    "score": 2,
-    "totalTime": 3
-  },
-  {
-    "userName": "2",
-    "score": 1,
-    "totalTime": 2
+    "userName": "0",
+    "score": 0,
+    "totalTime": 28
   }
 ]

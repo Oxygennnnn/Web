@@ -1,42 +1,42 @@
- /* styles.css */
+/* styles.css */
 
- body, html {
+body, html {
     margin: 0;
     padding: 0;
     height: 100%;
-    overflow: hidden;
+    overflow: hidden; /* Prevents scrollbars */
 }
 
 #background-video {
-    position: fixed;
+    position: fixed; /* Fixes the video in the viewport */
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    z-index: -1;
+    object-fit: cover; /* Maintains the video's aspect ratio and fills the container */
+    z-index: -1; /* Places the video at the lowest layer */
 }
 
 .content {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    position: absolute; /* Absolute positioning */
+    top: 50%; /* Vertically centers the element */
+    left: 50%; /* Horizontally centers the element */
+    transform: translate(-50%, -50%); /* Precisely centers the element */
     text-align: center;
     color: #fff;
-    z-index: 1;
+    z-index: 1; /* Ensures the content is above the video */
 }
 
 #main-title {
     font-size: 4em;
     font-family: 'Comic Sans MS', cursive;
-    animation: slideUp 2s ease-out;
+    animation: slideUp 2s ease-out; /* Applies the slideUp animation, lasts for 2 seconds */
 }
 
 #sub-title {
     font-size: 2em;
     font-family: 'Comic Sans MS', cursive;
-    animation: slideRight 2s ease-out;
+    animation: slideRight 2s ease-out; /* Applies the slideRight animation, lasts for 2 seconds */
 }
 
 .links a {
@@ -45,34 +45,33 @@
     font-size: 1.5em;
     font-family: 'Comic Sans MS', cursive;
     padding: 10px 20px;
-    background-color: rgba(255, 255, 255, 0);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0);
+    background-color: rgba(255, 255, 255, 0); /* Transparent background */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0); /* Transparent shadow */
 }
 
-/* 鼠标悬停效果 */
 .links a:hover {
-    background-color: rgba(255, 255, 255, 0.5);
-    transform: translateY(-5px);
+    background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent background on hover */
+    transform: translateY(-5px); /* Moves up 5px on hover */
 }
 
 @keyframes slideUp {
     0% {
-        transform: translateY(50px);
-        opacity: 0;
+        transform: translateY(50px); /* Initial position offset 50px down */
+        opacity: 0; /* Initial opacity */
     }
     100% {
-        transform: translateY(0);
-        opacity: 1;
+        transform: translateY(0); /* Final position */
+        opacity: 1; /* Final opacity */
     }
 }
 
 @keyframes slideRight {
     0% {
-        transform: translateX(50px);
-        opacity: 0;
+        transform: translateX(50px); /* Initial position offset 50px to the right */
+        opacity: 0; /* Initial opacity */
     }
     100% {
-        transform: translateX(0);
-        opacity: 1;
+        transform: translateX(0); /* Final position */
+        opacity: 1; /* Final opacity */
     }
 }

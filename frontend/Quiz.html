@@ -1,20 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Document Metadata -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Quiz</title>
+  <!-- External Stylesheet -->
   <link rel="stylesheet" href="Contentpage.css">
+  <!-- Socket.io Script -->
   <script src="/socket.io/socket.io.js"></script>
 
 </head>
 <body>
+  <!-- Background Video -->
   <video autoplay muted loop id="background-video">
     <source src="background-video.mp4" type="video/mp4">
     Your browser does not support the video tag.
   </video>
+  <!-- Top Navigation Bar -->
   <div class="top-bar">
     <div class="links">
+      <!-- Navigation Links -->
       <a href="Homepage.html">Homepage</a>
       <a href="About_Me.html">About Me</a>
       <a href="Explore_More.html">Explore More</a>
@@ -22,13 +28,16 @@
     </div>
   </div>
   
+  <!-- Total Elapsed Time -->
   <div id="timer">Elapsed Time: <span id="total-time">0</span> seconds</div>
+  <!-- Question Time Left -->
   <div id="question-timer">Time Left: <span id="time">15</span> seconds</div>
 
   <!-- Welcome Message -->
   <div id="welcome-message">
     <p>Welcome to the quiz!</p>
     <p>Give your name:</p>
+    <!-- User Name Input Form -->
     <form>
       <input type="text" id="player-name" name="player-name" placeholder="Enter your name">
       <button type="submit" id="start-button">Start</button>
@@ -39,12 +48,18 @@
   <div id="quiz-container" style="display:none;">
     <div id="question-screen">
       <div id="content">
+        <!-- Question Number -->
         <div id="questionID" class="question-text">Question 1</div>
+        <!-- Question Text -->
         <div id="question" class="question-text">Question text</div>
+        <!-- Choices -->
         <div id="choices" class="question"></div>
+        <!-- Question Timer -->
         <div id="timer" class="timer-text">Time to answer: <span id="time">15</span> seconds</div>
       </div>
+      <!-- Feedback Message -->
       <div id="feedback"></div>
+      <!-- Next Question Button -->
       <button id="next-button" style="display:none;" onclick="nextQuestion()">Next Question</button>
     </div>
   </div>
@@ -52,6 +67,7 @@
   <!-- Leaderboard -->
   <div id="leaderboard-container">
     <h2>Leaderboard</h2>
+    <!-- Leaderboard Table -->
     <table>
       <thead>
         <tr>
@@ -67,6 +83,7 @@
     </table>
   </div>
 
+  <!-- JavaScript -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const socket = io();
@@ -74,6 +91,7 @@
       const inputField = document.getElementById('player-name');
       const sendButton = document.getElementById('start-button');
   
+      // Start quiz when user submits their name
       sendButton.addEventListener('click', (e) => {
         e.preventDefault();
         const userName = inputField.value;
@@ -84,12 +102,13 @@
         startQuestionTimer();
       });
 
+      // Update leaderboard when receiving data from socket
       socket.on('updateLeaderboard', (leaderboard) => {
         updateLeaderboard(leaderboard);
       });
     });
 
-    // 框渐入特效
+    // Fade-in animation for welcome message
     window.onload = function() {
       const welcomeMessage = document.getElementById('welcome-message');
       let opacity = 0;
@@ -103,18 +122,27 @@
       }, 20);
     };
 
+    // Quiz questions
     const questions = [
-      { question: "Who is the MVP of the 2023-2024 NBA regular season?", choices: ["Nikola Jokić", "Shai Gilgeous-Alexander", "Joel Embiid", "Giannis Antetokounmpo"], correct: 0 },
-      { question: "Which club won the UEFA Champions League in 2023?", choices: ["Manchester City FC", "Real Madrid", "FC Bayren Munich", "FC Barcelona"], correct: 0 },
-      // Add more questions as needed
+      { question: "Which club won the UEFA Champions League in 2023?", choices: ["Real Madrid", "Manchester City FC", "FC Barcelona", "FC Bayren Munich"], correct: 1 },
+      { question: "Who is your favorite NBA star?", choices: ["Stephen Curry", "James Harden", "LeBron James", "Kevin Durant"], correct: 2 },
+      { question: "Who was your favorite soccer star?", choices: ["Cristiano Ronaldo", "Neymar Jr.", "Kylian Mbappé", "Lionel Messi"], correct: 3 },
+      { question: "Which club is your favorite?", choices: ["Real Madrid", "Manchester City", "Liverpool", "FC Barcelona"], correct: 1 },
+      { question: "What is your major?", choices: ["Mechanical Engineering", "Computer Science", "Software Engineering", "Electrical Engineering"], correct: 2 },
+      { question: "Which university do you attend?", choices: ["Peking University", "Tsinghua University", "South China Normal University", "Fudan University"], correct: 2 },
+      { question: "What is your favorite song?", choices: ["Shape of You", "Blinding Lights", "Someone Like You", "Mystery of Love"], correct: 3 },
+      { question: "Who is your favorite singer?", choices: ["Taylor Swift", "Adele", "Eason Chan", "Jay Chou"], correct: 2 },
+      { question: "Which of the following is not your hobby?", choices: ["Photography", "Cooking", "Gardening", "Calligraphy"], correct: 2 },
+      { question: "Which type of food do you rarely eat?", choices: ["Vegetables", "Fish", "Chicken", "Beef"], correct: 1 },
     ];
-  
+
     let totalTimerId;
     let questionTimerId;
     let totalTime = 0;
     let currentQuestion = 0;
     let score = 0;
   
+    // Function to start the total elapsed time timer
     function startTotalTimer() {
       const totalTimeDisplay = document.getElementById('total-time');
       function updateTotalTimer() {
@@ -124,6 +152,7 @@
       totalTimerId = setInterval(updateTotalTimer, 1000);
     }
   
+    // Function to start the question timer
     function startQuestionTimer() {
       const timeDisplay = document.getElementById('time');
       let timeLeft = 15;
@@ -143,6 +172,7 @@
       questionTimerId = setInterval(updateQuestionTimer, 1000);
     }
 
+    // Function to display current question
     function showQuestion() {
       const questionObj = questions[currentQuestion];
       document.getElementById('questionID').textContent = `Question ${currentQuestion + 1}`;
@@ -157,6 +187,7 @@
       });
     }
   
+    // Function to check the user's answer
     function checkAnswer(index) {
       clearInterval(questionTimerId);
       document.getElementById('content').style.display = 'none';
@@ -175,6 +206,7 @@
       }  
     }
   
+    // Function to move to the next question
     function nextQuestion() {
       currentQuestion += 1;
       if (currentQuestion < questions.length) {
@@ -188,6 +220,7 @@
       }
     }
 
+    // Function to display quiz results
     function showResults() {
       clearInterval(totalTimerId);
       const feedbackElement = document.getElementById('feedback');
@@ -202,6 +235,7 @@
       }, 2000);
     }
 
+    // Function to update the leaderboard
     function updateLeaderboard(leaderboard) {
       const leaderboardBody = document.getElementById('leaderboard-body');
       leaderboardBody.innerHTML = '';
@@ -219,3 +253,4 @@
   </script>
 </body>
 </html>
+

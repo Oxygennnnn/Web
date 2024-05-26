@@ -16,7 +16,7 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname + '/frontend/Homepage.html');
 });
 
-let leaderboard; // 声明leaderboard变量
+let leaderboard; // Declare the leaderboard variable
 
 // Handle socket connections
 io.on('connection', (socket) => {
@@ -57,13 +57,13 @@ io.on('connection', (socket) => {
 fs.readFile('leaderboard.json', (err, data) => {
   if (err) {
     console.error('Error reading leaderboard file:', err);
-    leaderboard = []; // 如果读取失败，则设置一个空的leaderboard
+    leaderboard = []; // If the read fails, set an empty leaderboard
   } else {
     try {
-      leaderboard = JSON.parse(data); // 读取成功，解析数据并赋值给leaderboard
+      leaderboard = JSON.parse(data); // Read successfully, parsed data and assigned to leaderboard
     } catch (error) {
       console.error('Error parsing leaderboard data:', error);
-      leaderboard = []; // 如果解析失败，则设置一个空的leaderboard
+      leaderboard = []; // If parsing fails, set an empty leaderboard
     }
   }
 });
