@@ -28,15 +28,16 @@
     </div>
   </div>
   
-  <!-- Total Elapsed Time -->
-  <div id="timer">Elapsed Time: <span id="total-time">0</span> seconds</div>
-  <!-- Question Time Left -->
-  <div id="question-timer">Time Left: <span id="time">15</span> seconds</div>
+  <!-- Total Elapsed Time and Question Time Left -->
+  <div id="timer-container" class="hidden">
+    <div id="timer">Elapsed Time: <span id="total-time">0</span> seconds</div>
+    <div id="question-timer">Time Left: <span id="time">15</span> seconds</div>
+  </div>
 
   <!-- Welcome Message -->
   <div id="welcome-message">
-    <p>Welcome to the quiz!</p>
-    <p>Give your name:</p>
+    <p style="font-size: 2em;">Welcome to the quiz!</p>
+    <p style="font-size: 1.5em;">Give your name:</p>
     <!-- User Name Input Form -->
     <form>
       <input type="text" id="player-name" name="player-name" placeholder="Enter your name">
@@ -54,8 +55,6 @@
         <div id="question" class="question-text">Question text</div>
         <!-- Choices -->
         <div id="choices" class="question"></div>
-        <!-- Question Timer -->
-        <div id="timer" class="timer-text">Time to answer: <span id="time">15</span> seconds</div>
       </div>
       <!-- Feedback Message -->
       <div id="feedback"></div>
@@ -97,6 +96,7 @@
         const userName = inputField.value;
         document.getElementById('welcome-message').style.display = 'none';
         document.getElementById('quiz-container').style.display = 'block';
+        document.getElementById('timer-container').classList.remove('hidden');
         startTotalTimer();
         showQuestion();
         startQuestionTimer();
@@ -125,15 +125,15 @@
     // Quiz questions
     const questions = [
       { question: "Which club won the UEFA Champions League in 2023?", choices: ["Real Madrid", "Manchester City FC", "FC Barcelona", "FC Bayren Munich"], correct: 1 },
-      { question: "Who is your favorite NBA star?", choices: ["Stephen Curry", "James Harden", "LeBron James", "Kevin Durant"], correct: 2 },
-      { question: "Who was your favorite soccer star?", choices: ["Cristiano Ronaldo", "Neymar Jr.", "Kylian Mbappé", "Lionel Messi"], correct: 3 },
-      { question: "Which club is your favorite?", choices: ["Real Madrid", "Manchester City", "Liverpool", "FC Barcelona"], correct: 1 },
-      { question: "What is your major?", choices: ["Mechanical Engineering", "Computer Science", "Software Engineering", "Electrical Engineering"], correct: 2 },
-      { question: "Which university do you attend?", choices: ["Peking University", "Tsinghua University", "South China Normal University", "Fudan University"], correct: 2 },
-      { question: "What is your favorite song?", choices: ["Shape of You", "Blinding Lights", "Someone Like You", "Mystery of Love"], correct: 3 },
-      { question: "Who is your favorite singer?", choices: ["Taylor Swift", "Adele", "Eason Chan", "Jay Chou"], correct: 2 },
-      { question: "Which of the following is not your hobby?", choices: ["Photography", "Cooking", "Gardening", "Calligraphy"], correct: 2 },
-      { question: "Which type of food do you rarely eat?", choices: ["Vegetables", "Fish", "Chicken", "Beef"], correct: 1 },
+      { question: "Who is my favorite NBA star?", choices: ["Stephen Curry", "James Harden", "LeBron James", "Kevin Durant"], correct: 2 },
+      { question: "Who was my favorite soccer star?", choices: ["Cristiano Ronaldo", "Neymar Jr.", "Kylian Mbappé", "Lionel Messi"], correct: 3 },
+      { question: "Which club is my favorite?", choices: ["Real Madrid", "Manchester City", "Liverpool", "FC Barcelona"], correct: 1 },
+      { question: "What is my major?", choices: ["Mechanical Engineering", "Computer Science", "Software Engineering", "Electrical Engineering"], correct: 2 },
+      { question: "Which university do I attend?", choices: ["Peking University", "Tsinghua University", "South China Normal University", "Fudan University"], correct: 2 },
+      { question: "What is my favorite song?", choices: ["Shape of You", "Blinding Lights", "Someone Like You", "Mystery of Love"], correct: 3 },
+      { question: "Who is my favorite singer?", choices: ["Taylor Swift", "Adele", "Eason Chan", "Jay Chou"], correct: 2 },
+      { question: "Which of the following is not my hobby?", choices: ["Photography", "Cooking", "Gardening", "Calligraphy"], correct: 2 },
+      { question: "Which type of food do I rarely eat?", choices: ["Vegetables", "Fish", "Chicken", "Beef"], correct: 1 },
     ];
 
     let totalTimerId;
@@ -192,20 +192,23 @@
       clearInterval(questionTimerId);
       document.getElementById('content').style.display = 'none';
       const feedbackElement = document.getElementById('feedback');
+      feedbackElement.style.fontSize = '2em';
       if (index === questions[currentQuestion].correct) {
         score++;
         feedbackElement.textContent = 'Your answer is correct!';
+        feedbackElement.style.color = 'green';
       } else {
         feedbackElement.textContent = 'Your answer is incorrect!';
+        feedbackElement.style.color = 'red';
       }
       feedbackElement.style.display = 'block';
       if (currentQuestion + 1 < questions.length) {
         document.getElementById('next-button').style.display = 'block';
       } else {
         showResults();
-      }  
+      }
     }
-  
+
     // Function to move to the next question
     function nextQuestion() {
       currentQuestion += 1;
@@ -253,4 +256,3 @@
   </script>
 </body>
 </html>
-
