@@ -70,5 +70,5 @@ fs.readFile('leaderboard.json', (err, data) => {
 
 // Start the server
 server.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}/`);
+  console.log(`Server running at https://rhinoleft-trumpetbenefit-5500.codio-box.uk/`);
 });

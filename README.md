@@ -6,25 +6,25 @@ This project created a WEB based personal website with Homepage, About Me, Explo
 ## Overall Design
 
 ### Homepage(root)
-* Path: `http://localhost:5500/Homepage.html`
+* Path: `https://rhinoleft-trumpetbenefit-5500.codio-box.uk/Homepage.html`
 * Related Files: **Homepage.html**, **Homepage.css**
 
 The home page is the main entry point to the site, and its main function is to welcome the user, containing a looping background video and a navigation bar. From the navigation bar, users can access the About Me, Explore More, and Quiz pages. Since the homepage has no interactive features, only the text animations use JavaScript code.
 
 ### About-me-page
-* Path: `http://localhost:5500/About_Me.html`
+* Path: `https://rhinoleft-trumpetbenefit-5500.codio-box.uk/About_Me.html`
 * Related Files: **About_Me.html**, **Contentpage.css**
 
 The "About Me" page provides brief information about me, including my background, hobbies, personal photos, etc. It corresponds to the required introduction page, which also contains a navigation bar that allows the user to return to the home page or visit other pages. The content of the page is mainly a static display of information and does not involve complex interactive features.
 
 ### Explore-more-page
-* Path: `http://localhost:5500/Explore_More.html`
+* Path: `https://rhinoleft-trumpetbenefit-5500.codio-box.uk/Explore_More.html`
 * Related Files: **Explore_More.html**, **Contentpage.css**
 
 The "Explore More" page is designed to provide more detailed information about me. Similar to the other pages, it contains a navigation bar to allow users to navigate between pages. The content of the page includes further reading material navigated by buttons, photos in the form of a slideshow, and so on.
 
 ### Quiz
-* Path: `http://localhost:5500/Quiz.html`
+* Path: `https://rhinoleft-trumpetbenefit-5500.codio-box.uk/Quiz.html`
 * Related Files: **Quiz.html**, **Contentpage.css**
 
 The quiz page is the core feature of the website where users can participate in a quiz and view the leaderboard. The page contains the following main sections:
@@ -106,4 +106,7 @@ In our quiz application, client-server communication is implemented using Socket
 5. **Client receives and updates the display**: all connected clients receive the `updateLeaderboard` event and call the appropriate function to update the leaderboard display on the page.
 
 ## References
-https://pixabay.com/zh/videos/search/fuji/
+* Background video source: https://pixabay.com/zh/videos/search/fuji/
+* Socket.IO Tutorial Documentation: https://socket.io/docs/v4/
+* W3School Tutorial Documentation: https://www.w3school.com.cn/
+
